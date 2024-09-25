@@ -61,15 +61,19 @@ const ContactMeSection = () => {
           <form onSubmit={formik.handleSubmit}>
             <VStack spacing={4}>
               <FormControl
-                isInvalid={formik.touched.firstName && formik.errors.firstName}
+                isInvalid={
+                  formik.touched.firstName && !!formik.errors.firstName
+                }
               >
                 <FormLabel htmlFor="firstName">Name</FormLabel>
                 <Input id="firstName" {...formik.getFieldProps("firstName")} />
-                <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
+                {formik.touched.firstName && formik.errors.firstName ? (
+                  <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
+                ) : null}
               </FormControl>
 
               <FormControl
-                isInvalid={formik.touched.email && formik.errors.email}
+                isInvalid={formik.touched.email && !!formik.errors.email}
               >
                 <FormLabel htmlFor="email">Email Address</FormLabel>
                 <Input
@@ -77,7 +81,9 @@ const ContactMeSection = () => {
                   type="email"
                   {...formik.getFieldProps("email")}
                 />
-                <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+                {formik.touched.email && formik.errors.email ? (
+                  <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+                ) : null}
               </FormControl>
 
               <FormControl>
@@ -92,7 +98,7 @@ const ContactMeSection = () => {
               </FormControl>
 
               <FormControl
-                isInvalid={formik.touched.comment && formik.errors.comment}
+                isInvalid={formik.touched.comment && !!formik.errors.comment}
               >
                 <FormLabel htmlFor="comment">Your message</FormLabel>
                 <Textarea
@@ -100,7 +106,9 @@ const ContactMeSection = () => {
                   height={250}
                   {...formik.getFieldProps("comment")}
                 />
-                <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
+                {formik.touched.comment && formik.errors.comment ? (
+                  <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
+                ) : null}
               </FormControl>
 
               <Button
