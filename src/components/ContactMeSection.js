@@ -64,13 +64,7 @@ const ContactMeSection = () => {
                 isInvalid={formik.touched.firstName && formik.errors.firstName}
               >
                 <FormLabel htmlFor="firstName">Name</FormLabel>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.firstName}
-                />
+                <Input id="firstName" {...formik.getFieldProps("firstName")} />
                 <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
               </FormControl>
 
@@ -80,24 +74,15 @@ const ContactMeSection = () => {
                 <FormLabel htmlFor="email">Email Address</FormLabel>
                 <Input
                   id="email"
-                  name="email"
                   type="email"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
+                  {...formik.getFieldProps("email")}
                 />
                 <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
               </FormControl>
 
               <FormControl>
                 <FormLabel htmlFor="type">Type of enquiry</FormLabel>
-                <Select
-                  id="type"
-                  name="type"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.type}
-                >
+                <Select id="type" {...formik.getFieldProps("type")}>
                   <option value="hireMe">Freelance project proposal</option>
                   <option value="openSource">
                     Open source consultancy session
@@ -112,11 +97,8 @@ const ContactMeSection = () => {
                 <FormLabel htmlFor="comment">Your message</FormLabel>
                 <Textarea
                   id="comment"
-                  name="comment"
                   height={250}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.comment}
+                  {...formik.getFieldProps("comment")}
                 />
                 <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
               </FormControl>
