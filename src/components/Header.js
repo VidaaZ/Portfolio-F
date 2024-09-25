@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { Box, HStack } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -7,7 +8,6 @@ import {
   faMedium,
   faStackOverflow,
 } from "@fortawesome/free-brands-svg-icons";
-import { Box, HStack } from "@chakra-ui/react";
 
 const socials = [
   {
@@ -33,20 +33,39 @@ const socials = [
 ];
 
 const Header = () => {
-  const handleClick = (anchor) => () => {
-    const id = `${anchor}-section`;
+  const [showHeader, setShowHeader] = useState(true); // State to toggle header visibility
+  const [lastScrollY, setLastScrollY] = useState(0); // To keep track of the last scroll position
+  const headerRef = useRef(null); // Ref to track the header DOM element
 
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  };
+  // Effect to handle the scroll event and add/remove listeners
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // If we are scrolling down, hide the header (slide it up)
+      if (currentScrollY > lastScrollY) {
+        setShowHeader(false);
+      } else {
+        // If we are scrolling up, show the header (slide it down)
+        setShowHeader(true);
+      }
+
+      // Update the last scroll position
+      setLastScrollY(currentScrollY);
+    };
+
+    // Attach scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
 
   return (
     <Box
+      ref={headerRef}
       position="fixed"
       top={0}
       left={0}
@@ -56,6 +75,7 @@ const Header = () => {
       transitionDuration=".3s"
       transitionTimingFunction="ease-in-out"
       backgroundColor="#18181b"
+      transform={showHeader ? "translateY(0)" : "translateY(-200px)"} // Animate based on scroll
     >
       <Box color="white" maxWidth="1280px" margin="0 auto">
         <HStack
@@ -80,12 +100,8 @@ const Header = () => {
           </nav>
           <nav>
             <HStack spacing={8}>
-              <a href="/#projects" onClick={handleClick("projects")}>
-                Projects
-              </a>
-              <a href="/#contactme" onClick={handleClick("contactme")}>
-                Contact Me
-              </a>
+              <a href="/#projects">Projects</a>
+              <a href="/#contactme">Contact Me</a>
             </HStack>
           </nav>
         </HStack>

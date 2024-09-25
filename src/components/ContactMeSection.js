@@ -40,11 +40,33 @@ const ContactMeSection = () => {
       comment: "",
     },
     validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
+      // Submit the form data
       await submit("/api/contact", values);
-      onOpen(response); // Show alert based on the response
     },
   });
+
+  // Effect to handle response changes for alert display
+  useEffect(() => {
+    if (response) {
+      if (response.type === "success") {
+        // Show success alert with the first name of the user
+        onOpen({
+          title: "Submission Successful",
+          description: `Thanks for your submission, ${formik.values.firstName}!`,
+          status: "success",
+        });
+        formik.resetForm(); // Reset form on success
+      } else if (response.type === "error") {
+        // Show error alert
+        onOpen({
+          title: "Submission Failed",
+          description: response.message,
+          status: "error",
+        });
+      }
+    }
+  }, [response, onOpen, formik]);
 
   return (
     <FullScreenSection
